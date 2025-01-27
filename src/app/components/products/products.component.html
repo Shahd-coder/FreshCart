@@ -1,0 +1,56 @@
+<section class="my-5 pt-5">
+    <div class="container">
+        <div class="d-flex flex-column align-items-center">
+        <h3 class="text-main">{{"main-layout.products.search" | translate}}</h3>
+        <input [(ngModel)]="text" type="text" class="form-control w-75 mb-4" id="Search">
+        </div>
+        <div class="row gy-4 gx-2">
+        @for (product of allProducts | search: text; track product._id) {
+            <div class="col-md-6 col-lg-3 cursor-pointer">
+
+                <div class="product h-100 p-3">
+                    
+                    @if (!ProductIds.has(product.id)) {
+                        <div class="text-end mb-2">
+                            <i (click)="AddProductToWishList(product._id)" class="fa-solid cursor-pointer fa-heart fs-3"></i>
+                        </div>
+                    }
+                    @else if (ProductIds.has(product.id)) {
+                        <div class="text-end">
+                            <i (click)="RemoveProductFromWishList(product._id)" class="fa-solid text-danger cursor-pointer fa-heart fs-3"></i>
+                        </div>
+                    }
+                    
+                    
+                      
+                    
+                    <div [routerLink]="'/productdetails/'+ product._id">
+                    <img class="w-100" [src]="product.imageCover" alt="Product Image">
+                    <p class="m-0 text-start mt-3">{{product.category.name}}</p>
+                    <h3 class="text-start">{{ product.title.split(" ").slice(0,3).join(" ") }}</h3>
+                    <div class="d-flex justify-content-between">
+                        <span>{{product.price | currency:'GBP'}}</span>
+                        <span>
+                        @if (product.ratingsAverage % 1 !== 0) {
+                            <i class="fa-solid fa-star-half-stroke rating-color me-1"></i>
+                        }
+                        @for (num of ['1','2','3','4','5'].slice(0,product.ratingsAverage); track $index) {
+                            <i class="fa-solid fa-star rating-color me-1"></i>
+                        }
+                            
+                         {{product.ratingsAverage}}
+                        </span>
+                    </div>
+                     <p [ngClass]="{
+                        'text-danger': product.quantity <= 0,
+                        'text-main': product.quantity > 0
+                     }" class="m-0">{{product.quantity | productStock}}</p>
+                    </div>
+                    <button (click)="AddProductToCart(product._id)" class="btn-main w-100 mt-3">{{"main-layout.products.btn" | translate}} <i class="fa-solid text-white fa-cart-shopping"></i></button>
+                </div>
+
+            </div>
+        }
+    </div>
+    </div>
+</section>

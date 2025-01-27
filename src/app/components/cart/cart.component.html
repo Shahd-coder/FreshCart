@@ -1,0 +1,64 @@
+<section class="my-5 pt-5">
+    <div class="container pt-3">
+        
+        <div class="row shadow-lg">
+            <div class="col-lg-8 bg-white p-4">
+                @if(totalItems !== 0 && userCart.data ){
+                <div class="info d-flex border-bottom pb-2 border-1 border-dark-subtle justify-content-between align-items-center">
+                    <h2>{{"main-layout.cart.title" | translate}}</h2>
+                    <h5>{{"main-layout.cart.items" | translate}} {{totalItems}}</h5>
+                </div>
+
+                @for (item of userCart.data.products; track $index) {
+                <div id="cart-items" class="row my-3 gy-3 gy-md-0 justify-content-between align-items-center">
+
+                    <div class="col-md-2">
+                        <img class="w-100" [src]="item.product.imageCover" alt="{{item.product.title}}">
+                    </div>
+
+                    <div class="col-md-4 text-center">
+                        <p class="m-0">{{item.product.title}}</p>
+                    </div>
+
+                    <div class="col-md-2 align-items-center justify-content-center d-flex flex-row gap-3">
+                        <button (click)="UpdateCartProductQTY(item.product.id,item.count + 1)"
+                            class="quantity-btn">+</button>
+                        <h5 class="m-0">{{item.count}}</h5>
+                        <button [disabled]="item.count == 1"
+                            (click)="UpdateCartProductQTY(item.product.id,item.count - 1)"
+                            class="quantity-btn">-</button>
+                    </div>
+
+                    <div class="col-md-3 text-center">
+                        <h6 class="m-0">{{item.price}} EGP</h6>
+                    </div>
+
+                    <div class="col-md-1 text-center">
+                        <i (click)="RemoveSpecificCartItem(item.product.id)"
+                            class="fa-solid cursor-pointer text-danger m-0 fa-trash"></i>
+                    </div>
+                </div>
+                }
+                }@else {
+                <div class="p-4">
+                    <h2>{{"main-layout.cart.cart-empty" | translate}}</h2>
+                    <button routerLink="/products" class="btn btn-main text-white my-4">{{"main-layout.cart.shop-now" | translate}}</button>
+                </div>
+                }
+            </div>
+            @if (totalItems !== 0) {
+            <div class="col-lg-4 bg-body-secondary p-4">
+                <h5 class="border-bottom pt-2 pb-4 border-1 border-dark-subtle">{{"main-layout.cart.summary" | translate}}</h5>
+                <div class="price-info d-flex justify-content-between pt-4">
+                    <h5 class="m-0 fw-semibold">{{"main-layout.cart.totalprice" | translate}}</h5>
+                    <h5 class="m-0 fw-bold">{{totalPrice}} EGP</h5>
+                </div>
+                <div class="controls d-flex flex-column gap-3 mt-5">
+                    <button [routerLink]="['/address',userCart.cartId]" class="btn btn-main text-white">{{"main-layout.cart.paynow" | translate}}</button>
+                    <button (click)="ClearUserCart()" class="btn btn-outline-danger">{{"main-layout.cart.clearcart" | translate}}</button>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</section>
